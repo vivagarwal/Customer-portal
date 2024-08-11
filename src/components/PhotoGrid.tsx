@@ -11,6 +11,7 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
         <img
           key={index}
           src={photo}
+          alt="" // Empty alt attribute for decorative images
           className="w-24 h-24 object-cover" // Adjusted size
         />
       ))}
