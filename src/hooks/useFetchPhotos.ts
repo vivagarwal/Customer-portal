@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
-const UNSPLASH_API_KEY = "CbkCtJMDdUBwUv_8FDOlgRu6MGQ36JTL_kP6dr0AcKI"; // Replace with your actual API key
+const UNSPLASH_API_KEY = "CbkCtJMDdUBwUv_8FDOlgRu6MGQ36JTL_kP6dr0AcKI"; 
 
 export const useFetchPhotos = (refreshInterval: number) => {
   const [photos, setPhotos] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchPhotos = async (retries = 3) => {
+  const fetchPhotos = useCallback(async (retries = 3) => {
     try {
       const response = await axios.get('https://api.unsplash.com/photos/random', {
         params: { count: 9 },
@@ -27,14 +27,13 @@ export const useFetchPhotos = (refreshInterval: number) => {
         console.error("Error fetching photos", error);
       }
     }
-  };
-  
+  }, []);
 
   useEffect(() => {
     fetchPhotos();
     const intervalId = setInterval(fetchPhotos, refreshInterval);
     return () => clearInterval(intervalId);
-  }, [refreshInterval]);
+  }, [refreshInterval, fetchPhotos]);
 
   return { photos, error }; // Return both photos and error
 };
